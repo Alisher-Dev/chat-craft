@@ -19,7 +19,7 @@ export const Message: FC<Props> = ({ message }) => {
 
   if (message.type === "image") {
     return (
-      <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,1fr))]">
+      <div className="grid grid-cols-[repeat(auto-fit,_minmax(200px,1fr))]">
         {message.content.split(" ").map((url) => (
           <img src={url} alt={url} key={url} />
         ))}

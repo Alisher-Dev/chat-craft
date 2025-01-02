@@ -1,3 +1,4 @@
+import { IMe, IMessage } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
@@ -96,10 +97,33 @@ export const isInDeep = () => {
   return delta < 500;
 };
 
-// formatter content
+/* Text utils */
+
 export const cutTextOnLimit = (content: string, limit: number = 30) => {
   if (content.length > limit) {
     return content.slice(0, limit + 1).trim() + "...";
   }
   return content;
+};
+
+export const getLastMessage = (lastMessage: IMessage, user: IMe | null) => {
+  const isMe = user?.id === lastMessage?.user?.id;
+  const sender = isMe ? "Вы" : lastMessage?.user?.username;
+  let message: string;
+
+  switch (lastMessage.type) {
+    case "image":
+      message = "Изображение";
+      break;
+    case "sticker":
+      message = "Стикер";
+      break;
+    case "voice":
+      message = "Голосовое сообщение";
+      break;
+    default:
+      message = cutTextOnLimit(lastMessage.content, 20);
+  }
+
+  return `${sender}: ${message}`;
 };
