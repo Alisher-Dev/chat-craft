@@ -7,53 +7,96 @@ interface Props {
   message: IMessage;
 }
 
-export const Message: FC<Props> = ({ message }) => {
-  if (message.type === "sticker") {
-    const stickerUrl = stiker[+message.content.slice(1, 3)].url;
-    return <img src={stickerUrl} className="block m-auto w-96 h-96" alt="stiker" />;
+function sendSticker(message: IMessage) {
+  const stickerIndex = parseInt(message.content.slice(1, 3), 10);
+  const stickerUrl = stiker[stickerIndex]?.url;
+
+  if (!stickerUrl) {
+    return <span className="text-red-500">Invalid sticker</span>;
   }
 
-  if (message.type === "voice") {
-    return <Waveform audioUrl={message.content} />;
-  }
+  return <img src={stickerUrl} className="block m-auto w-96 h-96" alt="sticker" />;
+}
 
-  if (message.type === "image") {
-    return (
-      <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,1fr))]">
-        {message.content.split(" ").map((url) => (
-          <img src={url} alt={url} key={url} />
-        ))}
-      </div>
-    );
-  }
+function sendAudio(message: IMessage) {
+  return <Waveform audioUrl={message.content} />;
+}
 
+function sendImage(message: IMessage) {
   return (
-    <p className="gap-2 flex flex-wrap">
-      {message.content.split(" ").map((word, index) => {
-        const isUrl = word.startsWith("https://") || word.startsWith("http://");
-        if (isUrl) {
-          return (
-            <>
-              <a href={word} key={index} target="_blank" className="text-blue-500 underline break-all">
-                {word}
-              </a>
-            </>
-          );
-        }
+    <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,1fr))]">
+      {message.content.split(" ").map((url) => (
+        <img src={url} alt="Image content" key={url} />
+      ))}
+    </div>
+  );
+}
 
-        return (
-          <div className="flex flex-col space-y-2">
-            {message.reply && (
-              <span className="p-2 border-primary bg-muted rounded-md shadow-md border-l-4">
-                {message.reply?.content}
-              </span>
-            )}
-            <span key={index} className="break-all text-lg">
-              {word}
-            </span>
-          </div>
-        );
-      })}
+function sendMessage(message: IMessage) {
+  return message.content.split(" ").map((word, index) => {
+    const isUrl = word.startsWith("https://") || word.startsWith("http://");
+
+    if (isUrl) {
+      return (
+        <a
+          href={word}
+          key={index}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline break-all"
+        >
+          {word}
+        </a>
+      );
+    }
+
+    return (
+      <span key={index} className="break-all">
+        {word}
+      </span>
+    );
+  });
+}
+
+function renderMessageContent(message: IMessage) {
+  switch (message.type) {
+    case "image":
+      return sendImage(message);
+    case "sticker":
+      return sendSticker(message);
+    case "voice":
+      return sendAudio(message);
+    case "text":
+      return sendMessage(message);
+    default:
+      return <span className="text-gray-500">тип сообщения не существует</span>;
+  }
+}
+
+function messageReply(reply: IMessage) {
+  switch (reply.type) {
+    case "image":
+      return "image";
+    case "sticker":
+      return "sticker";
+    case "voice":
+      return "audio";
+    case "text":
+      return reply.content;
+    default:
+      return "тип сообщения не существует";
+  }
+}
+
+export const Message: FC<Props> = ({ message }) => {
+  return (
+    <p className="gap-2 flex flex-wrap flex-col" onDoubleClick={() => {}}>
+      {message.reply && (
+        <span className="p-2 border-primary bg-muted rounded-md shadow-md mt-1 border-l-2">
+          {messageReply(message.reply)}
+        </span>
+      )}
+      {renderMessageContent(message)}
     </p>
   );
 };
