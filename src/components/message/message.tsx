@@ -1,8 +1,7 @@
 import { stiker } from "@/mock/stiker";
 import { IMessage } from "@/types";
 import { FC } from "react";
-import AudioPlayer from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
+import { AudioPlayer } from "react-audio-play";
 
 interface Props {
   message: IMessage;
@@ -22,7 +21,7 @@ export const Message: FC<Props> = ({ message }) => {
     return (
       <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,1fr))]">
         {message.content.split(" ").map((url) => (
-          <img src={url} alt={url} />
+          <img src={url} alt={url} key={url} />
         ))}
       </div>
     );
