@@ -17,11 +17,8 @@ export const FileUpload = ({ setUrl, clear = false }: PropsFile) => {
   async function handleFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-
       try {
-        const data = await fileUpload(formData);
+        const data = await fileUpload(file);
         setUploadFile(data);
         setUrl(data.url);
       } catch (error) {

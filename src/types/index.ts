@@ -3,6 +3,7 @@ import { loginSchema } from "@/validations/loginSchema";
 import { registerSchema } from "@/validations/registerSchema";
 import { AxiosError } from "axios";
 import { ReactNode } from "react";
+import { QueryKey, UseQueryOptions } from "react-query";
 import { InferType } from "yup";
 
 /* Base types ------------ */
@@ -35,6 +36,8 @@ export interface IRoutes {
   path: string;
   component: ReactNode;
 }
+
+export type QueryOptions<TData = null> = Omit<UseQueryOptions<any, TError, TData, QueryKey>, "queryKey">;
 
 /* Auth -------------- */
 
