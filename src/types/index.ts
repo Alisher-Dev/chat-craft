@@ -111,6 +111,7 @@ export interface IMessage {
   content: string;
   user: IMe;
   type: TMessageType;
+  reply: IMessage;
   chat: IChat;
   created_at: string;
   updated_at: string;

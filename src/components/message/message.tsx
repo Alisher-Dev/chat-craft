@@ -1,7 +1,7 @@
 import { stiker } from "@/mock/stiker";
 import { IMessage } from "@/types";
 import { FC } from "react";
-import { AudioPlayer } from "react-audio-play";
+import { Waveform } from "../visualizer";
 
 interface Props {
   message: IMessage;
@@ -14,7 +14,7 @@ export const Message: FC<Props> = ({ message }) => {
   }
 
   if (message.type === "voice") {
-    return <AudioPlayer className="audio-player border-none w-[250px] sm:w-[400px] bg-accent" src={message.content} />;
+    return <Waveform audioUrl={message.content} />;
   }
 
   if (message.type === "image") {
@@ -33,16 +33,25 @@ export const Message: FC<Props> = ({ message }) => {
         const isUrl = word.startsWith("https://") || word.startsWith("http://");
         if (isUrl) {
           return (
-            <a href={word} key={index} target="_blank" className="text-blue-500 underline break-all">
-              {word}
-            </a>
+            <>
+              <a href={word} key={index} target="_blank" className="text-blue-500 underline break-all">
+                {word}
+              </a>
+            </>
           );
         }
 
         return (
-          <span key={index} className="break-all">
-            {word}
-          </span>
+          <div className="flex flex-col space-y-2">
+            {message.reply && (
+              <span className="p-2 border-primary bg-muted rounded-md shadow-md border-l-4">
+                {message.reply?.content}
+              </span>
+            )}
+            <span key={index} className="break-all text-lg">
+              {word}
+            </span>
+          </div>
         );
       })}
     </p>
