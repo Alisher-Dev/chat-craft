@@ -44,7 +44,6 @@ export const ChatList: FC<Props> = ({ chatList, lastNewMessage, className }) => 
               className={cn("min-w-16 w-16 h-16 rounded-md object-cover transition-all")}
               alt="chat icon"
             />
-
             <div>
               <p className="font-semibold mb-1">{cutTextOnLimit(chat.name, 20)}</p>
               {lastMessage && (

@@ -5,6 +5,7 @@ import { IMessage } from "@/types";
 import { useAuthStore } from "@/store/auth";
 import { Message } from "./message";
 import { MessageWrapper } from "./messageWrapper";
+import { useReplyStore } from "@/store/reply";
 
 interface Props {
   messages?: IMessage[];
@@ -14,6 +15,7 @@ interface Props {
 
 export const MessageList: FC<Props> = ({ messages, className }) => {
   const { user } = useAuthStore();
+  const { setReply } = useReplyStore();
 
   return (
     <div className={cn("flex flex-col gap-10 sm:gap-6 py-2 px-4 bg-muted", className)}>
@@ -23,6 +25,7 @@ export const MessageList: FC<Props> = ({ messages, className }) => {
         return (
           <div
             className={cn("flex gap-3 sm:gap-6 items-end", isMe && "flex-row-reverse")}
+            onDoubleClick={() => setReply(message)}
             data-index={index}
             key={message.id}
           >

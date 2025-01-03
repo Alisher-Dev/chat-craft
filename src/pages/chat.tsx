@@ -76,7 +76,7 @@ const Chat: FC<Props> = ({ unselected }) => {
             {!unselected ? (
               <>
                 <ChatInfo />
-                <div className="min-h-[calc(100dvh-72px-56px)]">
+                <div className="min-h-[calc(100dvh-72px-56px)] overflow-auto">
                   <MessageList messages={messages} />
                   <MessageList messages={newMessages} />
                 </div>

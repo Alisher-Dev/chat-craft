@@ -26,7 +26,7 @@ function sendImage(message: IMessage) {
   return (
     <div className="grid grid-cols-[repeat(auto-fit,_minmax(250px,1fr))]">
       {message.content.split(" ").map((url) => (
-        <img className="max-h-[700px]" src={url} alt="Image content" key={url} />
+        <img className="max-h-[700px] max-w-[400px]" src={url} alt="Image content" key={url} />
       ))}
     </div>
   );
