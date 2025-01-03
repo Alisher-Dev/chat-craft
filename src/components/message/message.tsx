@@ -24,9 +24,9 @@ function sendAudio(message: IMessage) {
 
 function sendImage(message: IMessage) {
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,1fr))]">
+    <div className="grid grid-cols-[repeat(auto-fit,_minmax(250px,1fr))]">
       {message.content.split(" ").map((url) => (
-        <img src={url} alt="Image content" key={url} />
+        <img className="max-h-[700px]" src={url} alt="Image content" key={url} />
       ))}
     </div>
   );
@@ -52,7 +52,7 @@ function sendMessage(message: IMessage) {
 
     return (
       <span key={index} className="break-all">
-        {word}
+        {`${word} `}
       </span>
     );
   });
@@ -69,7 +69,7 @@ function renderMessageContent(message: IMessage) {
     case "text":
       return sendMessage(message);
     default:
-      return <span className="text-gray-500">тип сообщения не существует</span>;
+      return <span>тип сообщения не существует</span>;
   }
 }
 
@@ -90,13 +90,13 @@ function messageReply(reply: IMessage) {
 
 export const Message: FC<Props> = ({ message }) => {
   return (
-    <p className="gap-2 flex flex-wrap flex-col" onDoubleClick={() => {}}>
+    <p className="gap-2 flex flex-wrap flex-col">
       {message.reply && (
         <span className="p-2 border-primary bg-muted rounded-md shadow-md mt-1 border-l-2">
           {messageReply(message.reply)}
         </span>
       )}
-      {renderMessageContent(message)}
+      <p>{renderMessageContent(message)}</p>
     </p>
   );
 };
